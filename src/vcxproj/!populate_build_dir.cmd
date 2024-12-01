@@ -2,7 +2,7 @@
 
 set SAL_POPULATE_ROOT=%~dp0%
 
-set MSVC_REDIST_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33130
+set MSVC_REDIST_PATH=C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.42.34433
 set UCRT_REDIST_PATH=C:\Program Files (x86)\Windows Kits\10\Redist\10.0.22621.0
 set UCRTD_REDIST_PATH=C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.UniversalCRT.Debug\10.0.22621.0
 

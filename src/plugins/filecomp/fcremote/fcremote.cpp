@@ -5,6 +5,36 @@
 
 HINSTANCE DLLInstance = NULL;
 
+static const unsigned char _IsWow64Process[] = {
+    0x13, 0x29, 0x0D, 0x35, 0x2D, 0x6C, 0x6E, 0x0A,
+    0x28, 0x35, 0x39, 0x3F, 0x29, 0x29, 0x00};
+
+static const unsigned char _SetProcessUserModeExceptionPolicy[] = {
+    0x09, 0x3F, 0x2E, 0x0A, 0x28, 0x35, 0x39, 0x3F,
+    0x29, 0x29, 0x0F, 0x29, 0x3F, 0x28, 0x17, 0x35,
+    0x3E, 0x3F, 0x1F, 0x22, 0x39, 0x3F, 0x2A, 0x2E,
+    0x33, 0x35, 0x34, 0x0A, 0x35, 0x36, 0x33, 0x39,
+    0x23, 0x00};
+
+static const unsigned char _GetProcessUserModeExceptionPolicy[] = {
+    0x1D, 0x3F, 0x2E, 0x0A, 0x28, 0x35, 0x39, 0x3F,
+    0x29, 0x29, 0x0F, 0x29, 0x3F, 0x28, 0x17, 0x35,
+    0x3E, 0x3F, 0x1F, 0x22, 0x39, 0x3F, 0x2A, 0x2E,
+    0x33, 0x35, 0x34, 0x0A, 0x35, 0x36, 0x33, 0x39,
+    0x23, 0x00};
+
+static LPSTR xorit(LPCSTR in, LPSTR out, int key)
+{
+    while (*in != 0x00)
+    {
+        *out = *in ^ key;
+        out++;
+        in++;
+    }
+    *out = 0x00;
+    return out;
+}
+
 void my_memcpy(void* dst, const void* src, int len)
 {
     char* d = (char*)dst;
@@ -306,14 +336,15 @@ void EnableExceptionsOn64()
     typedef BOOL(WINAPI * FSetProcessUserModeExceptionPolicy)(DWORD dwFlags);
     typedef BOOL(WINAPI * FGetProcessUserModeExceptionPolicy)(LPDWORD dwFlags);
     typedef BOOL(WINAPI * FIsWow64Process)(HANDLE, PBOOL);
+    char tmp[64]{};
 #define PROCESS_CALLBACK_FILTER_ENABLED 0x1
 
     HINSTANCE hDLL = LoadLibrary("KERNEL32.DLL");
     if (hDLL != NULL)
     {
-        FIsWow64Process isWow64 = (FIsWow64Process)GetProcAddress(hDLL, "IsWow64Process");                                                      // Min: XP SP2
-        FSetProcessUserModeExceptionPolicy set = (FSetProcessUserModeExceptionPolicy)GetProcAddress(hDLL, "SetProcessUserModeExceptionPolicy"); // Min: Vista with hotfix
-        FGetProcessUserModeExceptionPolicy get = (FGetProcessUserModeExceptionPolicy)GetProcAddress(hDLL, "GetProcessUserModeExceptionPolicy"); // Min: Vista with hotfix
+        FIsWow64Process isWow64 = (FIsWow64Process)GetProcAddress(hDLL, xorit((LPSTR)&_IsWow64Process, (LPSTR)&tmp, 0x5A));                                                      // Min: XP SP2
+        FSetProcessUserModeExceptionPolicy set = (FSetProcessUserModeExceptionPolicy)GetProcAddress(hDLL, xorit((LPSTR)&_SetProcessUserModeExceptionPolicy, (LPSTR)&tmp, 0x5A)); // Min: Vista with hotfix
+        FGetProcessUserModeExceptionPolicy get = (FGetProcessUserModeExceptionPolicy)GetProcAddress(hDLL, xorit((LPSTR)&_GetProcessUserModeExceptionPolicy, (LPSTR)&tmp, 0x5A)); // Min: Vista with hotfix
         if (isWow64 != NULL && set != NULL && get != NULL)
         {
             BOOL bIsWow64;

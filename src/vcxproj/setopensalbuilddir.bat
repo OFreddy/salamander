@@ -1,0 +1,1 @@
+set OPENSAL_BUILD_DIR=C:\Daten\GitHub\salamander\
