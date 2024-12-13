@@ -14,6 +14,7 @@ on:
 
 env:
   OPENSAL_BUILD_DIR: ${{ github.workspace }}\build\
+  __your_choice: 8
 
 jobs:
   build:
@@ -25,18 +26,23 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
+        
       - name: echo MSBuild
         run: msbuild -version          
-      - name: Populate build
-        run: |
-          cd ${{ github.workspace }}\src\vcxproj
-          .\!populate_build_dir.cmd
+        
       - name: Build
         run: |
           cd ${{ github.workspace }}\src\vcxproj
           .\rebuild.cmd
+          
+      - name: Populate build
+        run: |
+          cd ${{ github.workspace }}\src\vcxproj
+          .\!populate_build_dir.cmd
+          
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

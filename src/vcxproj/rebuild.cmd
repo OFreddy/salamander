@@ -9,24 +9,31 @@ if "%OPENSAL_BUILD_DIR%"=="" (
   exit /b
 )
 
-if not exist "%MSB%" (
-  echo MSBuild.exe not found: %MSB%
-  echo.
-  pause
-  exit /b
+where /q msbuild.exe
+IF ERRORLEVEL 1 (
+	if not exist "%MSB%" (
+		echo MSBuild.exe not found: %MSB%
+		echo.
+		pause
+		exit /b
+	)
+) ELSE (
+    ECHO Application exists. Let's go!
 )
 
-echo Rebuild Menu:
-echo.
-echo 3 - rebuild all targets
-echo 5 - Internal Build (Utils+Debug x86/x64)
-echo 6 - Developers Build (Utils+Debug+Release x86/x64)
-echo 8 - Release/Beta Build (Utils+Release x86/x64)
-echo 9 - Utils Only (Utils x86/x64)
-echo.
-set __your_choice=5
-set /P __your_choice=Select what you want to rebuild (0-9) [5]: 
-echo.
+if "%__your_choice%"=="" (
+	echo Rebuild Menu:
+	echo.
+	echo 3 - rebuild all targets
+	echo 5 - Internal Build (Utils+Debug x86/x64)
+	echo 6 - Developers Build (Utils+Debug+Release x86/x64)
+	echo 8 - Release/Beta Build (Utils+Release x86/x64)
+	echo 9 - Utils Only (Utils x86/x64)
+	echo.
+	set __your_choice=5
+	set /P __your_choice=Select what you want to rebuild (0-9) [5]: 
+	echo.
+)
 
 if %__your_choice% LSS 3 goto :choice_is_invalid
 if %__your_choice% GTR 9 goto :choice_is_invalid
