@@ -16,6 +16,9 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    env: 
+      RELEASE_TAG: ${GITHUB_REF#refs/tags/}"
+      
     defaults:
       run:
         shell: pwsh
