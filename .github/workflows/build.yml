@@ -12,6 +12,7 @@ on:
 env:
   OPENSAL_BUILD_DIR: ${{ github.workspace }}\build\
   __your_choice: 8
+  MY_WORKFLOW_VAR: work
 
 jobs:
   build:
@@ -25,8 +26,12 @@ jobs:
 
     steps:
       - name: "Determine tag"
-        run: echo ::set-env name=RELEASE_TAG_1::${GITHUB_REF#refs/tags/}
-    
+        run: echo ::set-env name=STEPVAR::${{ env.MY_WORKFLOW_VAR }}-somestep
+#        run: echo ::set-env name=RELEASE_TAG_1::${GITHUB_REF#refs/tags/}
+
+      - name: Test
+        run: echo $STEPVAR
+        
       - name: Checkout source
         uses: actions/checkout@v4
         
