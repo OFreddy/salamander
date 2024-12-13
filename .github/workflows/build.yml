@@ -19,6 +19,7 @@ jobs:
     runs-on: windows-latest
     env: 
       RELEASE_TAG: ${{ github.ref_name }}
+      GITHUB_CONTEXT: ${{ toJson(github) }}
       
     defaults:
       run:
@@ -29,12 +30,11 @@ jobs:
         id: determine_tag
         uses: "actions/github-script@v6"
         with:
-          github-token: "${GITHUB_REF#refs/tags/}"
-          github-sha: "${GITHUB_SHA::7}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
             try {
-              core.exportVariable('RELEASE_ID_1', github-token);
-              core.exportVariable('RELEASE_ID_2', github-sha);
+              core.exportVariable('RELEASE_ID_1', 'o1');
+              core.exportVariable('RELEASE_ID_2', 'o2');
             } catch (error) {
               core.setFailed(error.message);
             }
