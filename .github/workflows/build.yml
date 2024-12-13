@@ -34,21 +34,32 @@ jobs:
         run: msbuild -version          
         
       - name: Build
+        id: build_release
         run: |
           cd ${{ github.workspace }}\src\vcxproj
           .\rebuild.cmd
           
-      - name: Populate build
-        run: |
-          cd ${{ github.workspace }}\src\vcxproj
-          .\!populate_build_dir.cmd
+#      - name: Populate build
+#        run: |
+#          cd ${{ github.workspace }}\src\vcxproj
+#          .\!populate_build_dir.cmd
           
-      - name: Create release
+      - name: upload windows artifact   
+        uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.build_release.outputs.upload_url }}
+          asset_path: ./bin/salamander.windows-amd64.zip
+          asset_name: salamander.windows-amd64.zip
+          asset_content_type: application/zip          
+      
+#      - name: Create release
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          tag: ${{ github.ref_name }}
+#        run: |
+#          gh release create "$tag" \
+#              --repo="$GITHUB_REPOSITORY" \
+#              --title="${tag#v}" \
+#              --generate-notes
