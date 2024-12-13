@@ -42,33 +42,13 @@ jobs:
 #        run: |
 #          cd ${{ github.workspace }}\src\vcxproj
 #          .\!populate_build_dir.cmd
-          
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          tag_name: ${{ github.ref }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
       
-      - name: upload windows artifact   
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/salamander.windows-amd64.zip
-          asset_name: salamander.windows-amd64.zip
-          asset_content_type: application/zip          
+      - name: Zip artifact for deployment
+          run: zip release.zip ${{ github.workspace }}\salamander\* -r
       
-#      - name: Create release
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          tag: ${{ github.ref_name }}
-#        run: |
-#          gh release create "$tag" \
-#              --repo="$GITHUB_REPOSITORY" \
-#              --title="${tag#v}" \
-#              --generate-notes
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: salamander
+          path: release.zip
+      
