@@ -34,8 +34,6 @@ jobs:
         run: msbuild -version          
         
       - name: Build
-        uses: actions/create-release@v1
-        id: build_release
         run: |
           cd ${{ github.workspace }}\src\vcxproj
           .\rebuild.cmd
