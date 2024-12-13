@@ -82,11 +82,11 @@ jobs:
               const response = await github.rest.repos.createRelease({
                 draft: false,
                 generate_release_notes: true,
-                name: process.env.RELEASE_TAG + ' ' + process.env.SHA,
+                name: process.env.RELEASE_TAG + '_' + process.env.SHA,
                 owner: context.repo.owner,
                 prerelease: false,
                 repo: context.repo.repo,
-                tag_name: process.env.RELEASE_TAG + ' ' + process.env.SHA,
+                tag_name: process.env.RELEASE_TAG + '_' + process.env.SHA,
               });
 
               core.exportVariable('RELEASE_ID', response.data.id);
