@@ -1,14 +1,11 @@
 # This is a basic workflow that is automatically triggered
 
-name: Build Solution
+name: Build and Release Solution 
 
 # Controls when the action will run. Workflow runs when push or pull to main  branch
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -24,6 +21,9 @@ jobs:
         shell: pwsh
 
     steps:
+      - name: "Determine tag"
+        run: "echo \"RELEASE_TAG=${GITHUB_REF#refs/tags/}\" >> $GITHUB_ENV"
+    
       - name: Checkout source
         uses: actions/checkout@v4
         
@@ -44,8 +44,7 @@ jobs:
 #          .\!populate_build_dir.cmd
       
       - name: Zip artifact for deployment
-        run: |
-          zip release.zip ${{ github.workspace }}\salamander\* -r
+        run: Compress-Archive -Path ${{ github.workspace }}\salamander\* -Destination release.zip
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
