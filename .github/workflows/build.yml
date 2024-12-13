@@ -33,10 +33,10 @@ jobs:
       - name: echo MSBuild
         run: msbuild -version          
         
-      - name: Build
-        run: |
-          cd ${{ github.workspace }}\src\vcxproj
-          .\rebuild.cmd
+#      - name: Build
+#        run: |
+#          cd ${{ github.workspace }}\src\vcxproj
+#          .\rebuild.cmd
           
 #      - name: Populate build
 #        run: |
@@ -44,17 +44,18 @@ jobs:
 #          .\!populate_build_dir.cmd
       
       - name: Zip artifact for deployment
-        run: Compress-Archive -Path ${{ github.workspace }}\* -Destination release.zip
-      
+#        run: Compress-Archive -Path ${{ github.workspace }}\* -Destination release.zip
+        run: |
+          powershell Compress-Archive -Path ${{ github.workspace }}\* -DestinationPath release.zip        
+          
       - name: Create Release
-        id: create_release
         uses: actions/create-release@v1
+        id: create_release
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          generate_release_notes: true      
+          release_name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
