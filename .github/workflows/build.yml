@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: windows-latest
     env: 
-      RELEASE_TAG: ${{ github.ref_name }}_${{ GITHUB_SHA::7 }}
+      RELEASE_TAG: ${{ github.ref_name }}
       
     defaults:
       run:
@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: "Determine tag"
-        run: "set RELEASE_TAG=${GITHUB_REF#refs/tags/}"
+        run: "echo ::set-env name=RELEASE_TAG_1=${GITHUB_REF#refs/tags/}"
     
       - name: Checkout source
         uses: actions/checkout@v4
