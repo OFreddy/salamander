@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: windows-latest
     env: 
-      RELEASE_TAG: ${{ github.ref_name }}_${GITHUB_SHA::7}
+      RELEASE_TAG: ${{ github.ref_name }}_${{ GITHUB_SHA::7 }}
       
     defaults:
       run:
