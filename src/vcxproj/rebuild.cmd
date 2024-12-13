@@ -1,4 +1,4 @@
-@echo off
+REM @echo off
 
 set MSB=C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe
 
@@ -22,16 +22,16 @@ IF ERRORLEVEL 1 (
 )
 
 if "%__your_choice%"=="" (
-	echo Rebuild Menu:
+	echo "Rebuild Menu:"
 	echo.
-	echo 3 - rebuild all targets
-	echo 5 - Internal Build (Utils+Debug x86/x64)
-	echo 6 - Developers Build (Utils+Debug+Release x86/x64)
-	echo 8 - Release/Beta Build (Utils+Release x86/x64)
-	echo 9 - Utils Only (Utils x86/x64)
+	echo "3 - rebuild all targets"
+	echo "5 - Internal Build (Utils+Debug x86/x64)"
+	echo "6 - Developers Build (Utils+Debug+Release x86/x64)"
+	echo "8 - Release/Beta Build (Utils+Release x86/x64)"
+	echo "9 - Utils Only (Utils x86/x64)"
 	echo.
 	set __your_choice=5
-	set /P __your_choice=Select what you want to rebuild (0-9) [5]: 
+	set /P __your_choice=Select what you want to rebuild 0-9 [5]: 
 	echo.
 )
 
