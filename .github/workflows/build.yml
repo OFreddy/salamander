@@ -37,35 +37,6 @@ jobs:
         run: echo $SHA
         env:
           SHA: ${{ steps.short-sha.outputs.sha }}
-          
-      - name: Set short git commit SHA
-        id: vars
-        run: |
-          calculatedSha=$(git rev-parse --short ${{ github.sha }})
-          echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
-
-      - name: Confirm git commit SHA output
-        run: echo ${{ env.COMMIT_SHORT_SHA }}
-    
-      - name: "Determine tag"
-        id: determine_tag
-        uses: "actions/github-script@v6"
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          script: |
-            try {
-              core.exportVariable('RELEASE_ID_1', 'o1');
-              core.exportVariable('RELEASE_ID_2', 'o2');
-            } catch (error) {
-              core.setFailed(error.message);
-            }
-    
-      - name: "Determine tag"
-        run: set STEPVAR=${{ env.MY_WORKFLOW_VAR }}-somestep
-#        run: echo ::set-env name=RELEASE_TAG_1::${GITHUB_REF#refs/tags/}
-
-      - name: Test
-        run: echo $STEPVAR
         
       - name: Checkout source
         uses: actions/checkout@v4
@@ -111,7 +82,7 @@ jobs:
               const response = await github.rest.repos.createRelease({
                 draft: false,
                 generate_release_notes: true,
-                name: process.env.RELEASE_TAG,
+                name: process.env.RELEASE_TAG+' '+process.env.SHA,
                 owner: context.repo.owner,
                 prerelease: false,
                 repo: context.repo.repo,
