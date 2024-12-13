@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: "Determine tag"
-        run: echo ::set-env name=STEPVAR::${{ env.MY_WORKFLOW_VAR }}-somestep
+        run: set STEPVAR=${{ env.MY_WORKFLOW_VAR }}-somestep
 #        run: echo ::set-env name=RELEASE_TAG_1::${GITHUB_REF#refs/tags/}
 
       - name: Test
