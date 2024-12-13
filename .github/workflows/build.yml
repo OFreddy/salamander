@@ -44,7 +44,8 @@ jobs:
 #          .\!populate_build_dir.cmd
       
       - name: Zip artifact for deployment
-          run: zip release.zip ${{ github.workspace }}\salamander\* -r
+          run: |
+            zip release.zip ${{ github.workspace }}\salamander\* -r
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
