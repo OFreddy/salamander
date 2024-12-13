@@ -43,19 +43,42 @@ jobs:
 #          cd ${{ github.workspace }}\src\vcxproj
 #          .\!populate_build_dir.cmd
       
-      - name: Zip artifact for deployment
+#      - name: Zip artifact for deployment
 #        run: Compress-Archive -Path ${{ github.workspace }}\* -Destination release.zip
-        run: |
-          powershell Compress-Archive -Path ${{ github.workspace }}\* -DestinationPath release.zip        
+#        run: |
+#          powershell Compress-Archive -Path ${{ github.workspace }}\* -DestinationPath release.zip        
           
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
+#      - name: Create Release
+#        uses: actions/create-release@v1
+#        id: create_release
+#        with:
+#          token: ${{ github.to }}
+#          draft: false
+#          prerelease: false
+#          release_name: Release_${{ github.ref_name }}
+#          tag_name: ${{ github.ref_name }}
+
+      - name: "Create release"
+        uses: "actions/github-script@v6"
         with:
-          draft: false
-          prerelease: false
-          release_name: Release ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            try {
+              const response = await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: true,
+                name: process.env.RELEASE_TAG,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: process.env.RELEASE_TAG,
+              });
+
+              core.exportVariable('RELEASE_ID', response.data.id);
+              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+            } catch (error) {
+              core.setFailed(error.message);
+            }
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
