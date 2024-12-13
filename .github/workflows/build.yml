@@ -26,6 +26,20 @@ jobs:
 
     steps:
       - name: "Determine tag"
+        id: determine_tag
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{GITHUB_REF#refs/tags/}}"
+          github-sha: "${GITHUB_SHA::7}"
+          script: |
+            try {
+              core.exportVariable('RELEASE_ID_1', github-token);
+              core.exportVariable('RELEASE_ID_2', github-sha);
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+    
+      - name: "Determine tag"
         run: set STEPVAR=${{ env.MY_WORKFLOW_VAR }}-somestep
 #        run: echo ::set-env name=RELEASE_TAG_1::${GITHUB_REF#refs/tags/}
 
