@@ -34,6 +34,7 @@ jobs:
         run: msbuild -version          
         
       - name: Build
+        uses: actions/create-release@v1
         id: build_release
         run: |
           cd ${{ github.workspace }}\src\vcxproj
@@ -44,12 +45,22 @@ jobs:
 #          cd ${{ github.workspace }}\src\vcxproj
 #          .\!populate_build_dir.cmd
           
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      
       - name: upload windows artifact   
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.build_release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bin/salamander.windows-amd64.zip
           asset_name: salamander.windows-amd64.zip
           asset_content_type: application/zip          

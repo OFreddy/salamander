@@ -1,4 +1,4 @@
-REM @echo off
+@echo off
 
 if "%OPENSAL_BUILD_DIR%"=="" (
   echo Please set OPENSAL_BUILD_DIR environment variable.
