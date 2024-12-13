@@ -1,7 +1,5 @@
 REM @echo off
 
-set MSB=C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe
-
 if "%OPENSAL_BUILD_DIR%"=="" (
   echo Please set OPENSAL_BUILD_DIR environment variable.
   echo.
@@ -9,8 +7,10 @@ if "%OPENSAL_BUILD_DIR%"=="" (
   exit /b
 )
 
-where /q msbuild.exe
+for /f "delims=" %%a in ('where msbuild.exe') do @set MSB=%%a
+echo MSBuild=%MSB%
 IF ERRORLEVEL 1 (
+	set MSB=C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe
 	if not exist "%MSB%" (
 		echo MSBuild.exe not found: %MSB%
 		echo.
