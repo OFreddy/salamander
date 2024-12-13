@@ -1,0 +1,37 @@
+# This is a basic workflow that is automatically triggered
+
+name: Build Solution
+
+# Controls when the action will run. Workflow runs when push or pull to main  branch
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  OPENSAL_BUILD_DIR: ${{ github.workspace }}\build\
+
+jobs:
+  build:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Populate build
+        run: |
+          cd ${{ github.workspace }}\src\vcxproj
+          .\!populate_build_dir.cmd
+      - name: Build
+        run: |
+          cd ${{ github.workspace }}\src\vcxproj
+          .\rebuild.cmd
+
