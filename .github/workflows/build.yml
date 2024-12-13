@@ -27,6 +27,17 @@ jobs:
         shell: pwsh
 
     steps:
+      - name: SHA
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+        with:
+          length: 6        
+
+      - name: SHA-OUT
+        run: echo $SHA
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+          
       - name: Set short git commit SHA
         id: vars
         run: |
