@@ -37,8 +37,8 @@ jobs:
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
+          echo "Release_Version: $RELEASE_VERSION"
+          echo "Tag: ${{ steps.vars.outputs.tag }}"
         
       - name: "Determine tag"
         run: "set RELEASE_TAG=${GITHUB_REF#refs/tags/}"
