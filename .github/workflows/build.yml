@@ -50,7 +50,7 @@ jobs:
         
       - name: echo MSBuild
         run: | 
-          if not exists ${{ env.OPENSAL_BUILD_DIR }} (mkdir ${{ env.OPENSAL_BUILD_DIR }})
+          if (!(test-path ${{ env.OPENSAL_BUILD_DIR }})) {mkdir ${{ env.OPENSAL_BUILD_DIR }}}
           msbuild -version          
           msbuild -version >> ${{ env.OPENSAL_BUILD_DIR }}msbuild.txt
         
