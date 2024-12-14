@@ -98,6 +98,7 @@ jobs:
           files: release.zip
           token: "${{ github.token }}"
           name: "${{ env.RELEASE_ID }}"
+          tag_name: "${{ env.RELEASE_ID }}"
         
 #      - name: Upload Release
 #        uses: SierraSoftworks/gh-releases@v1.0.7
