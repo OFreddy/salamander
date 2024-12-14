@@ -19,7 +19,6 @@ jobs:
     runs-on: windows-latest
     env: 
       RELEASE_TAG: ${{ github.ref_name }}
-#      GITHUB_CONTEXT: ${{ toJson(github) }}
       GITHUB_SHA: ${{ github.sha }}
       
     defaults:
@@ -27,13 +26,18 @@ jobs:
         shell: pwsh
 
     steps:
-      - name: SHA
+      - name: Output Github context
+        run: echo $GITHUB_CONTEXT
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: Create SHA
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
         with:
           length: 6        
 
-      - name: SHA-OUT
+      - name: Output SHA
         run: echo $SHA
         env:
           SHA: ${{ steps.short-sha.outputs.sha }}
@@ -45,7 +49,9 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         
       - name: echo MSBuild
-        run: msbuild -version          
+        run: | 
+          msbuild -version          
+          msbuild -version >> ${{ env.OPENSAL_BUILD_DIR }}msbuild.txt
         
       - name: Build
         run: |
@@ -60,9 +66,10 @@ jobs:
       - name: Zip artifact for deployment
         run: 7z a -tzip -mx=9 '-x!*.exp' '-x!*.lib' '-x!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}* 
 
-      - name: "Create release"
+      - name: Create release
         id: create_release
         uses: "actions/github-script@v6"
+        if: false
         with:
           github-token: "${{ github.token }}"
           script: |
