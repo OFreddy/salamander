@@ -55,6 +55,7 @@ jobs:
           msbuild -version >> ${{ env.OPENSAL_BUILD_DIR }}msbuild.txt
         
       - name: Build
+        if: false
         run: |
           cd ${{ github.workspace }}\src\vcxproj
           .\rebuild.cmd
@@ -70,7 +71,6 @@ jobs:
       - name: Create release
         id: create_release
         uses: "actions/github-script@v6"
-        if: false
         with:
           github-token: "${{ github.token }}"
           script: |
