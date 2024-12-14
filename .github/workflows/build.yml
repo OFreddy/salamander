@@ -50,6 +50,7 @@ jobs:
         
       - name: echo MSBuild
         run: | 
+          if not exists ${{ env.OPENSAL_BUILD_DIR }} mkdir ${{ env.OPENSAL_BUILD_DIR }}
           msbuild -version          
           msbuild -version >> ${{ env.OPENSAL_BUILD_DIR }}msbuild.txt
         
@@ -92,7 +93,7 @@ jobs:
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+#        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: release.zip
           token: "${{ github.token }}"
