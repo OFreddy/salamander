@@ -70,8 +70,7 @@ jobs:
         id: create_release
         uses: "actions/github-script@v6"
         with:
-          github-token: "${{ secrets.SUPER_SECRET }}"
-#          github-token: "${{ github.token }}"
+          github-token: "${{ github.token }}"
           script: |
             try {
               const response = await github.rest.repos.createRelease({
@@ -99,9 +98,9 @@ jobs:
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
-#          github-token: "${{ github.token }}"
-          GITHUB_TOKEN: ${{ secrets.SUPER_SECRET }}        
+          github-token: "${{ github.token }}"
         with:
+          github-token: "${{ github.token }}"
 #          upload_url: ${{ steps.create_release.outputs.upload_url }}
           upload_url: ${{env.RELEASE_UPLOAD_URL}}
           asset_path: ./release.zip
