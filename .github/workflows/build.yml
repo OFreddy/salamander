@@ -19,9 +19,8 @@ jobs:
     runs-on: windows-latest
     env: 
       RELEASE_TAG: ${{ github.ref_name }}
-      GITHUB_CONTEXT: ${{ toJson(github) }}
+#      GITHUB_CONTEXT: ${{ toJson(github) }}
       GITHUB_SHA: ${{ github.sha }}
-      SECRET: ${{ secrets.SUPERSECRET }}
       
     defaults:
       run:
@@ -59,7 +58,7 @@ jobs:
 #          .\!populate_build_dir.cmd
 
       - name: Zip artifact for deployment
-        run: 7z a -tzip -mx=9 '-x!*.exp' '-x!*.lib' '-x!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}\* 
+        run: 7z a -tzip -mx=9 '-x!*.exp' '-x!*.lib' '-x!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}* 
 
       - name: "Create release"
         id: create_release
@@ -78,7 +77,7 @@ jobs:
                 tag_name: process.env.RELEASE_TAG + '_' + process.env.SHA,
               });
 
-              core.exportVariable('RELEASE_ID', response.data.id);
+              core.exportVariable('RELEASE_ID', process.env.RELEASE_TAG + '_' + process.env.SHA);
               core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
             } catch (error) {
               core.setFailed(error.message);
@@ -89,6 +88,7 @@ jobs:
         with:
          files: release.zip
          token: "${{ github.token }}"
+         release_tag: "${{ env.RELEASE_ID }}"
 #      - name: Upload Release
 #        uses: ncipollo/release-action@v1.12.0
 #        with:
