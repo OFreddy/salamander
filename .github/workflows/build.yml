@@ -55,15 +55,16 @@ jobs:
           msbuild -version >> ${{ env.OPENSAL_BUILD_DIR }}msbuild.txt
         
       - name: Build
-        if: false
+        if: true
         run: |
           cd ${{ github.workspace }}\src\vcxproj
           .\rebuild.cmd
           
-#      - name: Populate build
-#        run: |
-#          cd ${{ github.workspace }}\src\vcxproj
-#          .\!populate_build_dir.cmd
+      - name: Populate build
+        if: false
+        run: |
+          cd ${{ github.workspace }}\src\vcxproj
+          .\!populate_build_dir.cmd
 
       - name: Zip artifact for deployment
         run: 7z a -tzip -mx=9 '-x!*.exp' '-x!*.lib' '-x!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}* 
@@ -100,26 +101,3 @@ jobs:
           name: "${{ env.RELEASE_ID }}"
           tag_name: "${{ env.RELEASE_ID }}"
         
-#      - name: Upload Release
-#        uses: SierraSoftworks/gh-releases@v1.0.7
-#        with:
-#         files: release.zip
-#        token: "${{ github.token }}"
-#         release_tag: "${{ env.RELEASE_ID }}"
-
-#      - name: Upload Release
-#        uses: ncipollo/release-action@v1.12.0
-#        with:
-#          artifacts: "release.zip"
-#          token: ${{ secrets.SUPERSECRET }}
-          
-#      - name: Upload Release Asset
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: "${{ github.token }}"
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          upload_url: ${{env.RELEASE_UPLOAD_URL}}
-#          asset_path: ./release.zip
-#          asset_name: release.zip
-#          asset_content_type: application/zip
