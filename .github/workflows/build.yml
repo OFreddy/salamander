@@ -66,7 +66,7 @@ jobs:
         id: create_release
         uses: "actions/github-script@v6"
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: "${{ secrets.SUPERSECRET }}"
           script: |
             try {
               const response = await github.rest.repos.createRelease({
@@ -89,10 +89,12 @@ jobs:
 #        uses: ncipollo/release-action@v1.12.0
 #        with:
 #          artifacts: "release.zip"
-#          token: ${{ secrets.GITHUB_TOKEN }}
+#          token: ${{ secrets.SUPERSECRET }}
           
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}        
         with:
 #          upload_url: ${{ steps.create_release.outputs.upload_url }}
           upload_url: ${{env.RELEASE_UPLOAD_URL}}
