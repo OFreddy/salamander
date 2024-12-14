@@ -48,10 +48,10 @@ jobs:
       - name: echo MSBuild
         run: msbuild -version          
         
-#      - name: Build
-#        run: |
-#          cd ${{ github.workspace }}\src\vcxproj
-#          .\rebuild.cmd
+      - name: Build
+        run: |
+          cd ${{ github.workspace }}\src\vcxproj
+          .\rebuild.cmd
           
 #      - name: Populate build
 #        run: |
@@ -59,7 +59,7 @@ jobs:
 #          .\!populate_build_dir.cmd
 
       - name: Zip artifact for deployment
-        run: 7z a -t7z -mx=1 release.zip ${{ github.workspace }}\*
+        run: 7z a -tzip -mx=1 release.zip ${{ github.workspace }}\*
       
 #      - name: Zip artifact for deployment
 #        run: Compress-Archive -Path ${{ github.workspace }}\* -Destination release.zip
