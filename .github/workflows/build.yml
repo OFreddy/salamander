@@ -57,17 +57,24 @@ jobs:
 #        run: |
 #          cd ${{ github.workspace }}\src\vcxproj
 #          .\!populate_build_dir.cmd
-      
+
       - name: Zip artifact for deployment
+        # You may pin to the exact commit or the version.
+        uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=1 release.zip ${{ github.workspace }}\*
+      
+#      - name: Zip artifact for deployment
 #        run: Compress-Archive -Path ${{ github.workspace }}\* -Destination release.zip
-        run: |
-          powershell Compress-Archive -Path ${{ github.workspace }}\* -DestinationPath release.zip        
+#        run: |
+#          powershell Compress-Archive -Path ${{ github.workspace }}\* -DestinationPath release.zip        
 
       - name: "Create release"
         id: create_release
         uses: "actions/github-script@v6"
         with:
-          github-token: "${{ secrets.SUPERSECRET }}"
+#          github-token: "${{ secrets.SUPERSECRET }}"
+          github-token: "${{ github.token }}"
           script: |
             try {
               const response = await github.rest.repos.createRelease({
@@ -95,7 +102,8 @@ jobs:
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}        
+          github-token: "${{ github.token }}"
+#          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}        
         with:
 #          upload_url: ${{ steps.create_release.outputs.upload_url }}
           upload_url: ${{env.RELEASE_UPLOAD_URL}}
