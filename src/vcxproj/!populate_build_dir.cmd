@@ -2,9 +2,15 @@
 
 set SAL_POPULATE_ROOT=%~dp0%
 
+if exist "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.42.34433\" (
 set MSVC_REDIST_PATH=C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.42.34433
+) else (
+set MSVC_REDIST_PATH=C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.40.33807
+)
 set UCRT_REDIST_PATH=C:\Program Files (x86)\Windows Kits\10\Redist\10.0.22621.0
 set UCRTD_REDIST_PATH=C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.UniversalCRT.Debug\10.0.22621.0
+
+
 
 echo Populate Open Salamander Build directory with redistributable DLLs and optionally
 echo with SFX packages and helps.
