@@ -66,8 +66,11 @@ jobs:
           cd ${{ github.workspace }}\src\vcxproj
           .\!populate_build_dir.cmd
 
+      - name: Add externals to artifact
+        run: 7z x ${{ github.workspace }}\externals\redistributables.zip -o${{ env.OPENSAL_BUILD_DIR }} 
+
       - name: Zip artifact for deployment
-        run: 7z a -tzip -mx=9 '-xr!*.exp' '-xr!*.lib' '-xr!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}salamander\* 
+        run: 7z a -tzip '-xr!*.exp' '-xr!*.lib' '-xr!*.pdb' '-xr!Intermediate' release.zip ${{ env.OPENSAL_BUILD_DIR }}salamander\* 
 
       - name: Create release
         id: create_release
