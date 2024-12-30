@@ -3,13 +3,14 @@
 name: Build and Release Solution 
 
 # Controls when the action will run. Workflow runs when a release is triggered
-on:
-  release:
-    types: [created]
+#on:
+#  release:
+#    types: [created]
     
 # Controls when the action will run. Workflow runs when manually triggered using the UI or API.
-#on:
-#  workflow_dispatch:
+on:
+  workflow_dispatch:
+
 # Controls when the action will run. Workflow runs when push or pull to main  branch
 #on:
 #  push:
