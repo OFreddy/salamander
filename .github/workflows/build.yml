@@ -2,12 +2,19 @@
 
 name: Build and Release Solution 
 
-# Controls when the action will run. Workflow runs when push or pull to main  branch
-
+# Controls when the action will run. Workflow runs when a release is triggered
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
+    
+# Controls when the action will run. Workflow runs when manually triggered using the UI or API.
+#on:
+#  workflow_dispatch:
+# Controls when the action will run. Workflow runs when push or pull to main  branch
+#on:
+#  push:
+#    branches:
+#      - main
 
 env:
   OPENSAL_BUILD_DIR: ${{ github.workspace }}\build\
@@ -35,7 +42,7 @@ jobs:
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
         with:
-          length: 6        
+          length: 7        
 
       - name: Output SHA
         run: echo $SHA
